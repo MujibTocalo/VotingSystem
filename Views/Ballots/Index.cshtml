@@ -1,0 +1,54 @@
+﻿@model IEnumerable<VotingSystem.Data.Ballots>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.candidateId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.positionId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.organizationId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.voters)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.candidateId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.positionId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.organizationId)
+            </td>
+            <td>
+                    @Html.DisplayFor(modelItem => item.voters.id)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
