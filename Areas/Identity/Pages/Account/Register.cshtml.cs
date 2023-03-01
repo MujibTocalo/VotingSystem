@@ -10,9 +10,12 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
+using VotingSystem.Controllers;
 using VotingSystem.Data;
 
 namespace VotingSystem.Areas.Identity.Pages.Account
@@ -25,18 +28,23 @@ namespace VotingSystem.Areas.Identity.Pages.Account
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
         private readonly ApplicationDbContext _context;
+        private readonly RoleManager<IdentityRole> _roleManager;
+        private object name;
+
 
         public RegisterModel(
             UserManager<IdentityUser> userManager,
             SignInManager<IdentityUser> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender, ApplicationDbContext context)
+            IEmailSender emailSender, ApplicationDbContext context,
+            RoleManager<IdentityRole> roleManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
             _context = context;
+            _roleManager = roleManager;
         }
 
         [BindProperty]
@@ -57,6 +65,10 @@ namespace VotingSystem.Areas.Identity.Pages.Account
             [Display(Name = "Name")]
             public string Name { get; set; }
 
+            [Required]
+
+            public string? Role { get; set; }
+
             //[Required]
             [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
             [DataType(DataType.Password)]
@@ -66,13 +78,28 @@ namespace VotingSystem.Areas.Identity.Pages.Account
             [DataType(DataType.Password)]
             [Display(Name = "Confirm password")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+
+
+            [ValidateNever]
+            public IEnumerable<SelectListItem> RoleList { get; set; }
+
             public string ConfirmPassword { get; set; }
         }
 
         public async Task OnGetAsync(string returnUrl = null)
         {
+
             ReturnUrl = returnUrl;
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+
+            Input = new InputModel()
+            {
+                RoleList = _roleManager.Roles.Select(x => x.Name).Select(i => new SelectListItem
+                {
+                    Text = i,
+                    Value = i
+                })
+            };
         }
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
@@ -110,9 +137,12 @@ namespace VotingSystem.Areas.Identity.Pages.Account
                     {
                         Voters voterModel = new Voters();
 
-                        voterModel.user = user.Id;
-                        voterModel.name = Input.Name;
-                        voterModel.password = _password;
+
+                            voterModel.user = user.Id;
+                            voterModel.name = Input.Name;
+                            voterModel.password = _password;
+
+                   
 
                         _context.Voters.Add(voterModel);
                         _context.SaveChanges();

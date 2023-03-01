@@ -9,6 +9,7 @@ using VotingSystem.Models;
 
 namespace VotingSystem.Controllers
 {
+
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;

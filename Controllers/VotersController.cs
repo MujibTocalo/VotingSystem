@@ -10,9 +10,10 @@ using VotingSystem.Data;
 
 namespace VotingSystem.Controllers
 {
-    [Authorize]
+    
     public class VotersController : Controller
     {
+
         private readonly ApplicationDbContext _context;
 
         public VotersController(ApplicationDbContext context)
