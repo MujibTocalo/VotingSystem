@@ -10,6 +10,9 @@ namespace VotingSystem.Data
         public string user { get; set; }
 
         public string name { get; set; }
+        public string password { get; set; }
+        //public string course { get; set; }
+
 
         public int? organizationId { get; set; }
 
