@@ -84,7 +84,7 @@ namespace VotingSystem.Areas.Identity.Pages.Account
 
                 string _password = RandomPassword(10);
 
-                var user = new IdentityUser { UserName = Input.Email, Email = Input.Email };
+                var user = new IdentityUser {UserName = Input.Email, Email = Input.Email  };
                 var result = await _userManager.CreateAsync(user, _password);
                 if (result.Succeeded)
                 {
