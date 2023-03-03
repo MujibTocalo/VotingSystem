@@ -16,6 +16,8 @@ namespace VotingSystem.Areas.Identity
         {
             builder.ConfigureServices((context, services) => {
             });
+            
+
         }
     }
 }
