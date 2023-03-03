@@ -65,9 +65,7 @@ namespace VotingSystem.Areas.Identity.Pages.Account
             [Display(Name = "Name")]
             public string Name { get; set; }
 
-            [Required]
-
-            public string? Role { get; set; }
+ 
 
             //[Required]
             [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
@@ -80,27 +78,20 @@ namespace VotingSystem.Areas.Identity.Pages.Account
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
 
 
-            [ValidateNever]
-            public IEnumerable<SelectListItem> RoleList { get; set; }
-
             public string ConfirmPassword { get; set; }
         }
 
-        public async Task OnGetAsync(string returnUrl = null)
-        {
-
-            ReturnUrl = returnUrl;
-            ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
-
-            Input = new InputModel()
+     
+        //Function in assigning roles
+            private async Task AssignRoleToUser(IdentityUser user, string role)
             {
-                RoleList = _roleManager.Roles.Select(x => x.Name).Select(i => new SelectListItem
+                if (await _roleManager.RoleExistsAsync(role))
                 {
-                    Text = i,
-                    Value = i
-                })
-            };
-        }
+                    await _userManager.AddToRoleAsync(user, role);
+                }
+            }
+
+        
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
@@ -140,13 +131,12 @@ namespace VotingSystem.Areas.Identity.Pages.Account
 
                             voterModel.user = user.Id;
                             voterModel.name = Input.Name;
-                            voterModel.password = _password;
-
-                   
+                        voterModel.password = _password;
 
                         _context.Voters.Add(voterModel);
                         _context.SaveChanges();
                         //await _signInManager.SignInAsync(user, isPersistent: false);
+                        await AssignRoleToUser(user, "Voter");
                         return LocalRedirect(returnUrl);
                     }
                 }

@@ -10,7 +10,7 @@ using VotingSystem.Data;
 
 namespace VotingSystem.Controllers
 {
-    
+  
     public class VotersController : Controller
     {
 
