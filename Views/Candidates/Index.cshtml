@@ -5,12 +5,12 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Index</h1>
+<h1 class="bg-info text-white" style="text-align:center">Candidate</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
 </p>
-<table class="table">
+<table class="table table-sm table-bordered">
     <thead>
         <tr>
             <th>
@@ -38,9 +38,9 @@
                 @Html.DisplayFor(modelItem => item.organizationId)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.id">Delete</a>
+                <a asp-action="Edit" asp-route-id="@item.id" class="btn btn-sm btn-outline-primary">Edit</a> 
+                <a asp-action="Details" asp-route-id="@item.id" class="btn btn-sm btn-outline-info">Details</a> 
+                <a asp-action="Delete" asp-route-id="@item.id" class="btn btn-sm btn-outline-danger">Delete</a>
             </td>
         </tr>
 }
