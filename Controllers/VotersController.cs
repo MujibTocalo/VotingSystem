@@ -56,7 +56,7 @@ namespace VotingSystem.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("id,user,name,organizationId")] Voters voters)
+        public async Task<IActionResult> Create([Bind("id,name,organizationId")] Voters voters)
         {
             if (ModelState.IsValid)
             {
@@ -88,7 +88,7 @@ namespace VotingSystem.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("id,user,name,organizationId")] Voters voters)
+        public async Task<IActionResult> Edit(int id, [Bind("id,name,organizationId")] Voters voters)
         {
             if (id != voters.id)
             {

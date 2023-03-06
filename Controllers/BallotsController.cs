@@ -48,6 +48,7 @@ namespace VotingSystem.Controllers
             return View(ballots);
         }
 
+        
         // GET: Ballots/Create
         public IActionResult Create()
         {
