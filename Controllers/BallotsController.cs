@@ -11,6 +11,8 @@ using VotingSystem.Data;
 
 namespace VotingSystem.Controllers
 {
+    [Authorize (Roles = "Voters")]
+    
     public class BallotsController : Controller
     {
         private readonly ApplicationDbContext _context;

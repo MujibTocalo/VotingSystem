@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
@@ -136,7 +137,17 @@ namespace VotingSystem.Areas.Identity.Pages.Account
                         _context.Voters.Add(voterModel);
                         _context.SaveChanges();
                         //await _signInManager.SignInAsync(user, isPersistent: false);
-                        await AssignRoleToUser(user, "Voter");
+                        await AssignRoleToUser(user, "Voters");
+                        var claim = new Claim("VoterClaim", "True");
+                        await _userManager.AddClaimAsync(user, new Claim(user.Id, user.Email));
+
+
+                        //user.Claims.Add(new IdentityUserClaim<string>
+                        //{
+                        //    ClaimType = "ProductUploadRequest",
+                        //    ClaimValue = "Allow"
+                        //});
+
                         return LocalRedirect(returnUrl);
                     }
                 }

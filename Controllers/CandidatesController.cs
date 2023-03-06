@@ -12,6 +12,7 @@ using VotingSystem.Data;
 
 namespace VotingSystem.Controllers
 {
+    [Authorize (Roles = "Admin")]
   
     public class CandidatesController : Controller
     {

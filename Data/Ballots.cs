@@ -14,6 +14,7 @@ namespace VotingSystem.Data
         public int? positionId { get; set; }
 
         public int? organizationId { get; set; }
+       
 
         public Voters  voters { get; set; }
 
