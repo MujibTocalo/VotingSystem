@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Identity.Controllers
 {
-    [Authorize(Roles = "Admin")]
+
     public class RoleController : Controller
     {
         private RoleManager<IdentityRole> roleManager;
@@ -23,7 +23,6 @@ namespace Identity.Controllers
                 ModelState.AddModelError("", error.Description);
         }
 
-        [Authorize(Roles = "Admin")]
         public IActionResult Create() => View();
 
         [HttpPost]

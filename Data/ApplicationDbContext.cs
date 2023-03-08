@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore.Storage;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using VotingSystem.Models;
 
 namespace VotingSystem.Data
 {
@@ -21,6 +22,8 @@ namespace VotingSystem.Data
         public virtual DbSet<Voters> Voters { get; set; }
         public virtual DbSet<Positions> Positions { get; set; }
         public virtual DbSet<Candidates> Candidates { get; set; }
+        public DbSet<Comelec> Comelec { get; set; }
+        
 
 
     }

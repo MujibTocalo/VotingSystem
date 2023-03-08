@@ -9,6 +9,18 @@
   <ItemGroup>
     <Compile Remove="Controllers\HomeController1.cs" />
     <Compile Remove="Controllers\HomeController2.cs" />
+    <Compile Remove="Migrations\20230306132644_comelec.cs" />
+    <Compile Remove="Migrations\20230306132644_comelec.Designer.cs" />
+    <Compile Remove="Migrations\20230306133337_Colemec.cs" />
+    <Compile Remove="Migrations\20230306133337_Colemec.Designer.cs" />
+    <Compile Remove="Migrations\20230306133740_CreateComelecTable.cs" />
+    <Compile Remove="Migrations\20230306133740_CreateComelecTable.Designer.cs" />
+    <Compile Remove="Migrations\20230306133927_Comelec.cs" />
+    <Compile Remove="Migrations\20230306133927_Comelec.Designer.cs" />
+    <Compile Remove="Migrations\20230306134715_initial.cs" />
+    <Compile Remove="Migrations\20230306134715_initial.Designer.cs" />
+    <Compile Remove="Migrations\20230306134856_initial.cs" />
+    <Compile Remove="Migrations\20230306134856_initial.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
