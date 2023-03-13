@@ -65,6 +65,7 @@ namespace VotingSystem.Controllers
                 return RedirectToAction(nameof(Index));
             }
             return View(voters);
+
         }
 
         // GET: Voters/Edit/5

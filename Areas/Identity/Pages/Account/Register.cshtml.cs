@@ -92,8 +92,6 @@ namespace VotingSystem.Areas.Identity.Pages.Account
                 }
             }
 
-        
-
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
             returnUrl = returnUrl ?? Url.Content("~/");
@@ -137,7 +135,7 @@ namespace VotingSystem.Areas.Identity.Pages.Account
                         _context.Voters.Add(voterModel);
                         _context.SaveChanges();
                         //await _signInManager.SignInAsync(user, isPersistent: false);
-                        await AssignRoleToUser(user, "Voters");
+                        await AssignRoleToUser(user, "Admin");
                         var claim = new Claim("VoterClaim", "True");
                         await _userManager.AddClaimAsync(user, new Claim(user.Id, user.Email));
 

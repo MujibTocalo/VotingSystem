@@ -25,8 +25,9 @@ namespace VotingSystem.Controllers
         // GET: Ballots
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Ballots.Include(b => b.voters);
-            return View(await applicationDbContext.ToListAsync());
+            var votersInOrganization = _context.Voters.Where(v => v.organizationId == 1).ToList();
+            ViewData["Voters"] = votersInOrganization;
+            return View();
         }
 
         // GET: Ballots/Details/5
@@ -56,6 +57,7 @@ namespace VotingSystem.Controllers
             ViewData["positionId"] = new SelectList(_context.Positions, "id", "name");
             ViewData["candidateId"] = new SelectList(_context.Candidates, "id", "name");
             ViewData["organizationId"] = new SelectList(_context.Organizations, "id", "name");
+            
             return View();
         }
 
