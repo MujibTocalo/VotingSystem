@@ -1,12 +1,14 @@
 ﻿@model VotingSystem.Data.Ballots
+@using VotingSystem.Data
 
 @{
     ViewData["Title"] = "Create";
     Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var candidates = (List<Candidates>)ViewBag.Candidates;
+    var positions = candidates.Select(c => c.position).Distinct().ToList();
 }
-
 <h1>Create</h1>
-
 <h4>Ballots</h4>
 <hr />
 <div class="row">
@@ -14,16 +16,16 @@
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="votersId" class="control-label"></label>
-                <select asp-for="votersId" class ="form-control" asp-items="ViewBag.votersId"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="candidateId" class="control-label"></label>
-                <select asp-for="candidateId" class="form-control" asp-items="ViewBag.candidateId"></select>
+                <label asp-for="positionId" class="control-label"></label>
+                <select asp-for="votersId" class="form-control" asp-items="@(new SelectList(ViewBag.Candidates, "id", "name"))"></select>
             </div>
             <div class="form-group">
                 <label asp-for="positionId" class="control-label"></label>
-                <select asp-for="positionId" class="form-control" asp-items="ViewBag.positionId"></select>
+                <select asp-for="positionId" class="form-control" asp-items="@(new SelectList(positions, "id", "name"))" onchange="getPositionsCandidates(this.value)"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="candidateId" class="control-label"></label>
+                <select asp-for="candidateId" class="form-control"></select>
             </div>
             <div class="form-group">
                 <label asp-for="organizationId" class="control-label"></label>
@@ -35,11 +37,26 @@
         </form>
     </div>
 </div>
-
 <div>
     <a asp-action="Index">Back to List</a>
 </div>
-
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        var candidates = @Html.Raw(Json.Serialize(ViewBag.Candidates));
+        var selectCandidate = document.querySelector('#candidateId');
+
+        function getPositionsCandidates(positionId) {
+            var positionCandidates = candidates.filter(c => c.positionId == positionId);
+            selectCandidate.innerHTML = '';
+            positionCandidates.forEach(c => {
+                var option = document.createElement('option');
+                option.text = c.name;
+                option.value = c.id;
+                selectCandidate.appendChild(option);
+            });
+        }
+    </script>
 }

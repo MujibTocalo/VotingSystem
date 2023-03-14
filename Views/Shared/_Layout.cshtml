@@ -27,7 +27,7 @@
                             @if(User.IsInRole("Voters"))
                             {
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Balots" asp-action="Index">Candidates</a>
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Ballots" asp-action="Index">Candidates</a>
                                 </li>
                             }
                             @if (User.IsInRole("Admin"))
@@ -49,6 +49,9 @@
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link text-dark" asp-area="" asp-controller="Comelecs" asp-action="Index">Comelec</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Ballots" asp-action="Index">Ballots</a>
                                 </li>
                             }
                             @if (User.IsInRole("Comelec"))

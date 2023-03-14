@@ -48,6 +48,7 @@ namespace VotingSystem.Controllers
         // GET: Voters/Create
         public IActionResult Create()
         {
+            ViewData["organizationId"] = new SelectList(_context.Organizations, "id", "name");
             return View();
         }
 
@@ -64,6 +65,7 @@ namespace VotingSystem.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["organizationId"] = new SelectList(_context.Organizations, "id", "name");
             return View(voters);
 
         }
