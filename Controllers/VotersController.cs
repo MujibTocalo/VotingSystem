@@ -10,7 +10,7 @@ using VotingSystem.Data;
 
 namespace VotingSystem.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin, Comelec")]
     public class VotersController : Controller
     {
 

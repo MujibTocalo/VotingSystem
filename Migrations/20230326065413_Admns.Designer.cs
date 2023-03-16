@@ -10,8 +10,8 @@ using VotingSystem.Data;
 namespace VotingSystem.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230314144155_dbcontext")]
-    partial class dbcontext
+    [Migration("20230326065413_Admns")]
+    partial class Admns
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -221,6 +221,27 @@ namespace VotingSystem.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("VotingSystem.Data.Admins", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("password")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("user")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("id");
+
+                    b.ToTable("Admins");
+                });
+
             modelBuilder.Entity("VotingSystem.Data.Ballots", b =>
                 {
                     b.Property<int>("id")
@@ -269,6 +290,9 @@ namespace VotingSystem.Migrations
                     b.Property<int?>("positionId")
                         .HasColumnType("int");
 
+                    b.Property<int>("votes")
+                        .HasColumnType("int");
+
                     b.HasKey("id");
 
                     b.HasIndex("organizationId");
@@ -299,6 +323,9 @@ namespace VotingSystem.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("candidates")
+                        .HasColumnType("int");
 
                     b.Property<string>("name")
                         .HasColumnType("nvarchar(max)");

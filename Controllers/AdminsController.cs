@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -11,24 +9,22 @@ using VotingSystem.Data;
 
 namespace VotingSystem.Controllers
 {
-    [Authorize(Roles = "Admin, Comelec")]
-    public class PositionsController : Controller
+    public class AdminsController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public PositionsController(ApplicationDbContext context)
+        public AdminsController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // GET: Positions
+        // GET: Admins
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Positions.Include(p => p.Organization);
-            return View(await applicationDbContext.ToListAsync());
+            return View(await _context.Admins.ToListAsync());
         }
 
-        // GET: Positions/Details/5
+        // GET: Admins/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -36,42 +32,39 @@ namespace VotingSystem.Controllers
                 return NotFound();
             }
 
-            var positions = await _context.Positions
-                .Include(p => p.Organization)
+            var admins = await _context.Admins
                 .FirstOrDefaultAsync(m => m.id == id);
-            if (positions == null)
+            if (admins == null)
             {
                 return NotFound();
             }
 
-            return View(positions);
+            return View(admins);
         }
 
-        // GET: Positions/Create
+        // GET: Admins/Create
         public IActionResult Create()
         {
-            ViewData["organizationId"] = new SelectList(_context.Organizations, "id","name");
             return View();
         }
 
-        // POST: Positions/Create
+        // POST: Admins/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("id,name,organizationId")] Positions positions)
+        public async Task<IActionResult> Create([Bind("id,user,name,password")] Admins admins)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(positions);
+                _context.Add(admins);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["organizationId"] = new SelectList(_context.Organizations, "id", "id", positions.organizationId);
-            return View(positions);
+            return View(admins);
         }
 
-        // GET: Positions/Edit/5
+        // GET: Admins/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -79,23 +72,22 @@ namespace VotingSystem.Controllers
                 return NotFound();
             }
 
-            var positions = await _context.Positions.FindAsync(id);
-            if (positions == null)
+            var admins = await _context.Admins.FindAsync(id);
+            if (admins == null)
             {
                 return NotFound();
             }
-            ViewData["organizationId"] = new SelectList(_context.Organizations, "id", "id", positions.organizationId);
-            return View(positions);
+            return View(admins);
         }
 
-        // POST: Positions/Edit/5
+        // POST: Admins/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("id,name,organizationId")] Positions positions)
+        public async Task<IActionResult> Edit(int id, [Bind("id,user,name,password")] Admins admins)
         {
-            if (id != positions.id)
+            if (id != admins.id)
             {
                 return NotFound();
             }
@@ -104,12 +96,12 @@ namespace VotingSystem.Controllers
             {
                 try
                 {
-                    _context.Update(positions);
+                    _context.Update(admins);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!PositionsExists(positions.id))
+                    if (!AdminsExists(admins.id))
                     {
                         return NotFound();
                     }
@@ -120,11 +112,10 @@ namespace VotingSystem.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["organizationId"] = new SelectList(_context.Organizations, "id", "id", positions.organizationId);
-            return View(positions);
+            return View(admins);
         }
 
-        // GET: Positions/Delete/5
+        // GET: Admins/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -132,31 +123,30 @@ namespace VotingSystem.Controllers
                 return NotFound();
             }
 
-            var positions = await _context.Positions
-                .Include(p => p.Organization)
+            var admins = await _context.Admins
                 .FirstOrDefaultAsync(m => m.id == id);
-            if (positions == null)
+            if (admins == null)
             {
                 return NotFound();
             }
 
-            return View(positions);
+            return View(admins);
         }
 
-        // POST: Positions/Delete/5
+        // POST: Admins/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var positions = await _context.Positions.FindAsync(id);
-            _context.Positions.Remove(positions);
+            var admins = await _context.Admins.FindAsync(id);
+            _context.Admins.Remove(admins);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool PositionsExists(int id)
+        private bool AdminsExists(int id)
         {
-            return _context.Positions.Any(e => e.id == id);
+            return _context.Admins.Any(e => e.id == id);
         }
     }
 }

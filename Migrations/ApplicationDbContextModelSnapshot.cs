@@ -219,6 +219,27 @@ namespace VotingSystem.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("VotingSystem.Data.Admins", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("password")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("user")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("id");
+
+                    b.ToTable("Admins");
+                });
+
             modelBuilder.Entity("VotingSystem.Data.Ballots", b =>
                 {
                     b.Property<int>("id")
@@ -265,6 +286,9 @@ namespace VotingSystem.Migrations
                         .HasColumnType("int");
 
                     b.Property<int?>("positionId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("votes")
                         .HasColumnType("int");
 
                     b.HasKey("id");

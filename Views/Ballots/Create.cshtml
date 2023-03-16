@@ -7,18 +7,18 @@
 
 <!-- Display the positions above the candidates dropdown -->
 @foreach (var position in ViewBag.Positions)
-        {
-   
-<div class ="row">
-     <div class="col-md-4">
-          <form asp-action="Create">
-                 <div class="form-group"> 
-                <label  value="@position.name"  class="control-label"></label>
+{
+
+    <div class="row">
+        <div class="col-md-4">
+            <form asp-action="Create">
+                <div class="form-group">
+                    <label value="@position.name" class="control-label"></label>
                     <label value="@position.name"><h1>@position.name</h1></label>
-                        <br>
+                    <br>
                     <select>
-                @foreach (var group in ViewBag.GroupedCandidates)
-                {
+                        @foreach (var group in ViewBag.GroupedCandidates)
+                        {
 
                             @foreach (var candidate in group)
                             {
@@ -28,22 +28,19 @@
                                 }
                             }
                             <!-- Display the candidates grouped by position -->
-                }
+                        }
                     </select>
                 </div>
 
-               <div class="form-group">
-              
-            </div>
+                <div class="form-group">
+                </div>
             </form>
+        </div>
     </div>
-</div>
 }
 <input type="submit" value="Create" class="btn btn-primary" />
 
 <!-- Display the candidates dropdown -->
- 
-
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");

@@ -21,6 +21,12 @@
     <Compile Remove="Migrations\20230306134715_initial.Designer.cs" />
     <Compile Remove="Migrations\20230306134856_initial.cs" />
     <Compile Remove="Migrations\20230306134856_initial.Designer.cs" />
+    <Compile Remove="Migrations\20230326063841_VotingS.cs" />
+    <Compile Remove="Migrations\20230326063841_VotingS.Designer.cs" />
+    <Compile Remove="Migrations\20230326064738_AddAdminsTable.cs" />
+    <Compile Remove="Migrations\20230326064738_AddAdminsTable.Designer.cs" />
+    <Compile Remove="Migrations\20230326065229_addMods.cs" />
+    <Compile Remove="Migrations\20230326065229_addMods.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

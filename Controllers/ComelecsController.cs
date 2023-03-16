@@ -18,7 +18,7 @@ using static Microsoft.AspNetCore.Identity.UI.V3.Pages.Account.Internal.External
 
 namespace VotingSystem.Controllers
 {
-    //[Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin")]
     public class ComelecsController : Controller
     {
         UserManager<IdentityUser> userManager;

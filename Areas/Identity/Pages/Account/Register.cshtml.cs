@@ -125,14 +125,14 @@ namespace VotingSystem.Areas.Identity.Pages.Account
                     }
                     else
                     {
-                       Voters voterModel = new Voters();
+                       Admins admin = new Admins();
 
 
-                            voterModel.user = user.Id;
-                            voterModel.name = Input.Name;
-                        voterModel.password = _password;
+                        admin.user = user.Id;
+                        admin.name = Input.Name;
+                        admin.password = _password;
 
-                        _context.Voters.Add(voterModel);
+                        _context.Admins.Add(admin);
                         _context.SaveChanges();
                         //await _signInManager.SignInAsync(user, isPersistent: false);
                         await AssignRoleToUser(user, "Admin");

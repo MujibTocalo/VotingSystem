@@ -23,7 +23,9 @@ namespace VotingSystem.Data
         public virtual DbSet<Positions> Positions { get; set; }
         public virtual DbSet<Candidates> Candidates { get; set; }
         public DbSet<Comelec> Comelec { get; set; }
-        
+
+        public DbSet<Admins> Admins { get; set; }
+
 
 
     }

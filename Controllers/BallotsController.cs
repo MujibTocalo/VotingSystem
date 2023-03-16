@@ -11,8 +11,8 @@ using VotingSystem.Data;
 
 namespace VotingSystem.Controllers
 {
-   
-   public class BallotsController : Controller
+    [Authorize(Roles = "Admin, Voters")]
+    public class BallotsController : Controller
     {
         private readonly ApplicationDbContext _context;
 
@@ -80,7 +80,7 @@ namespace VotingSystem.Controllers
         }
 
         // GET: Ballots/Create
-        public async Task<IActionResult>Create()
+        public async Task<IActionResult> Create()
         {
             var namesOfCandidates = new List<string>();
 
@@ -114,11 +114,11 @@ namespace VotingSystem.Controllers
             var candidateNames = groupedCandidates
             .Select(g => new { PositionName = g.Key.name, CandidateNames = g.Select(c => c.name).ToList() })
             .ToList();
-            
+
 
             ViewBag.GroupedCandidates = groupedCandidates;
             ViewData["organizationId"] = new SelectList(_context.Organizations, "id", "name");
-           
+
 
             return View();
         }
@@ -136,7 +136,7 @@ namespace VotingSystem.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-          
+
 
             return View();
         }
