@@ -10,8 +10,8 @@ using VotingSystem.Data;
 namespace VotingSystem.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230306134920_new")]
-    partial class @new
+    [Migration("20230314144155_dbcontext")]
+    partial class dbcontext
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

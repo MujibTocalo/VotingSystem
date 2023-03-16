@@ -12,6 +12,8 @@ namespace VotingSystem.Data
 
         public int? organizationId { get; set; }
 
+        public int? candidates { get; set; }
+
 
         public virtual Organizations Organization { get; set; }
 

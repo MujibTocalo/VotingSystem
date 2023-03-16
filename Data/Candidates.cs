@@ -9,6 +9,7 @@ namespace VotingSystem.Data
 
         public string name { get; set; }
 
+
         public int? positionId { get; set; }
 
         public int? organizationId { get; set; }

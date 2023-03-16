@@ -1,68 +1,55 @@
-﻿    @model IEnumerable<VotingSystem.Data.Ballots>
-    @{
-        ViewData["Title"] = "Index";
-        Layout = "~/Views/Shared/_Layout.cshtml";
-    }
+﻿@model IEnumerable<VotingSystem.Data.Ballots>
 
-    <h1>Index</h1>
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
 
-    <p>
-        <a asp-action="Create">Create New</a>
-    </p>
+<h1>Index</h1>
 
-    @foreach (var position in Model)
-    {
-        <h3>@position.candidate.name</h3>
-        <div>
-            <select>
-                @foreach (var candidate in Model)
-                {
-                    if (position.candidate.id == position.id)
-                    {
-                        <option value="@candidate.candidate.name">@candidate.candidate.name</option>
-                    }
-                }
-            </select>
-        </div>
-    }
-
-    <table class="table">
-        <thead>
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.candidateId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.positionId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.organizationId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.voters)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
             <tr>
-                <th>
-                    Candidate Name
-                </th>
-                <th>
-                    Position Name
-                </th>
-                <th>
-                    Organization Name
-                </th>
-                <th>
-                    Number of Voters
-                </th>
-                <th></th>
+                <td>
+                    @Html.DisplayFor(modelItem => item.candidateId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.positionId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.organizationId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.voters.id)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.id">Delete</a>
+                </td>
             </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.candidate.name)
-                    </td>
-
-                    <td>
-                        @Html.DisplayFor(modelItem => item.position.name)
-                    </td>
-
-                
-                        @Html.DisplayFor(modelItem => item.organization.name)
-                    <td>
-                        <a asp-action="Details" asp-route-id="@item.id">Details</a> |
-                        <a asp-action="Delete" asp-route-id="@item.id">Delete</a>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
+        }
+    </tbody>
+</table>

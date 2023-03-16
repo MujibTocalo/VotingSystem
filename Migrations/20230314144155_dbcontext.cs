@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace VotingSystem.Migrations
 {
-    public partial class @new : Migration
+    public partial class dbcontext : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

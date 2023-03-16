@@ -125,7 +125,7 @@ namespace VotingSystem.Areas.Identity.Pages.Account
                     }
                     else
                     {
-                        Voters voterModel = new Voters();
+                       Voters voterModel = new Voters();
 
 
                             voterModel.user = user.Id;
@@ -136,7 +136,7 @@ namespace VotingSystem.Areas.Identity.Pages.Account
                         _context.SaveChanges();
                         //await _signInManager.SignInAsync(user, isPersistent: false);
                         await AssignRoleToUser(user, "Admin");
-                        var claim = new Claim("VoterClaim", "True");
+                        var claim = new Claim("AdminClaim", "True");
                         await _userManager.AddClaimAsync(user, new Claim(user.Id, user.Email));
 
 
