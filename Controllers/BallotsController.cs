@@ -80,7 +80,7 @@ namespace VotingSystem.Controllers
         }
 
         // GET: Ballots/Create
-        public async Task<IActionResult>Create()
+        public async Task<IActionResult>Create([Bind("votes,name,position")] Candidates kandidato)
         {
             var namesOfCandidates = new List<string>();
 
@@ -118,7 +118,12 @@ namespace VotingSystem.Controllers
 
             ViewBag.GroupedCandidates = groupedCandidates;
             ViewData["organizationId"] = new SelectList(_context.Organizations, "id", "name");
-           
+
+
+            kandidato.votes++;
+            _context.Update(kandidato);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
 
             return View();
         }
@@ -126,13 +131,14 @@ namespace VotingSystem.Controllers
         // POST: Ballots/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("id,votersId,candidateId,positionId,organizationId")] Ballots ballots)
+      
+        /*
+        public async Task<IActionResult> Create([Bind("votes,name,position")] Candidates candidate)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(ballots);
+                candidate.votes++;
+                _context.Update(candidate);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
@@ -140,7 +146,7 @@ namespace VotingSystem.Controllers
 
             return View();
         }
-
+        */
         // GET: Ballots/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
