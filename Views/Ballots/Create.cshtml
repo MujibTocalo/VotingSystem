@@ -1,4 +1,4 @@
-﻿@model VotingSystem.Data.Ballots
+﻿@model List<VotingSystem.Data.Ballots>
 
 @{
     ViewData["Title"] = "Create";
@@ -9,14 +9,18 @@
 <div class="col-md-4">
     <form asp-action="Create">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        @{
+            int i = 0;
+        }
         @foreach (var position in ViewBag.Positions)
         {
             <div class="row">
                 <div class="col-md-4">
                     <div class="form-group">
-                        <label asp-for="position" value="@position.name"><h1>@position.name</h1></label>
+                        <label asp-for="@Model[i].candidateId" value="@position.name"><h1>@position.name</h1></label>
                         <br>
-                        <select asp-for="@Model.candidateId" class="form-control">
+                        <select asp-for="@Model[i].candidateId" class="form-control form-control-sm form-control-range"
+                                style="width: 20px height: 20px">
                             @foreach (var candidate in ViewBag.Candidates)
                             {
                                 if (position.id == candidate.positionId)
@@ -25,12 +29,14 @@
                                 }
                             }
                         </select>
-                        <input type="hidden" asp-for="@Model.positionId" value="@position.id" />
-                        <input type="hidden" asp-for="@Model.organizationId" value="@position.organizationId" />
-                     
+                        <input type="hidden" asp-for="@Model[i].positionId" value="@position.id" />
+                        <input type="hidden" asp-for="@Model[i].organizationId" value="@position.organizationId" />
+
                     </div>
                 </div>
             </div>
+
+            i++;
         }
         <div class="form-group">
             <input type="submit" value="Create" class="btn btn-primary" />

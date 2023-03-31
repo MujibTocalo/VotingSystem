@@ -22,39 +22,6 @@ namespace VotingSystem.Controllers
         {
             _context = context;
         }
-        public async Task<IEnumerable<string>> GetPosition(int id)
-        {
-            var position = await _context.Positions.FindAsync(id);
-
-            if (position == null)
-            {
-                return Enumerable.Empty<string>();
-            }
-
-            var candidates = await _context.Candidates
-                .Where(c => c.position.name == position.name)
-                .Select(c => c.name)
-                .ToListAsync();
-
-            return candidates;
-        }
-
-        public async Task<IEnumerable<string>> GetCandidate(int id)
-        {
-            var candidate = await _context.Candidates.FindAsync(id);
-
-            if (candidate == null)
-            {
-                return Enumerable.Empty<string>();
-            }
-
-            var newCandidate = await _context.Candidates
-                .Where(c => c.position.name == candidate.position.name)
-                .Select(c => c.name)
-                .ToListAsync();
-
-            return newCandidate;
-        }
         // GET: Ballots
         public async Task<IActionResult> Index()
         {
@@ -88,35 +55,52 @@ namespace VotingSystem.Controllers
             var positions = await _context.Positions.ToListAsync();
             var candidates = await _context.Candidates.ToListAsync();
 
-            ViewData["Positions"] = positions;
-            ViewData["Candidates"] = candidates;
+            List<Ballots> ballots = new List<Ballots>();
 
-            return View();
+            foreach (var item in positions)
+            {
+
+                ballots.Add(new Ballots { position = item } );
+
+                ViewData["Positions"] = positions;
+                ViewData["Candidates"] = candidates;
+            }
+
+           
+
+            return View(ballots);
         }
 
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("id,name,votersId,candidateId, positionId, organizationId")] Ballots ballots)
+        public async Task<IActionResult> Create(List<Ballots> ballots)
         {
             if (ModelState.IsValid)
             {
 
-                    var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-                    var voter = _context.Voters.SingleOrDefault(a => a.user == userIdString);
+                var voter = _context.Voters.SingleOrDefault(a => a.user == userIdString);
+
+
+                foreach (var item in ballots)
+                {
+                    
                     if (voter != null)
                     {
                         Ballots ballot = new Ballots();
 
-                        ballot.candidateId = ballots.candidateId;
-                        ballot.positionId = ballots.positionId;
-                        ballot.organizationId = ballots.positionId;
+                        ballot.candidateId = item.candidateId;
+                        ballot.positionId = item.positionId;
+                        ballot.organizationId = item.organizationId;
                         ballot.votersId = voter.id;
                         _context.Ballots.Add(ballot);
                     }
 
-                await _context.SaveChangesAsync();
+                    await _context.SaveChangesAsync();
+                }
+                    
                 return RedirectToAction(nameof(Index));
                
             }
