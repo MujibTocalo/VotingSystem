@@ -6,40 +6,42 @@
 }
 
 <!-- Display the positions above the candidates dropdown -->
-@foreach (var position in ViewBag.Positions)
-{
-
-    <div class="row">
-        <div class="col-md-4">
-            <form asp-action="Create">
-                <div class="form-group">
-                    <label value="@position.name" class="control-label"></label>
-                    <label value="@position.name"><h1>@position.name</h1></label>
-                    <br>
-                    <select>
-                        @foreach (var group in ViewBag.GroupedCandidates)
-                        {
-
-                            @foreach (var candidate in group)
+<div class="col-md-4">
+    <form asp-action="Create">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        @foreach (var position in ViewBag.Positions)
+        {
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label asp-for="position" value="@position.name"><h1>@position.name</h1></label>
+                        <br>
+                        <select asp-for="@Model.candidateId" class="form-control">
+                            @foreach (var candidate in ViewBag.Candidates)
                             {
-                                @if (position.id == candidate.positionId)
+                                if (position.id == candidate.positionId)
                                 {
                                     <option value="@candidate.id">@candidate.name</option>
                                 }
                             }
-                            <!-- Display the candidates grouped by position -->
-                        }
-                    </select>
+                        </select>
+                        <input type="hidden" asp-for="@Model.positionId" value="@position.id" />
+                        <input type="hidden" asp-for="@Model.organizationId" value="@position.organizationId" />
+                     
+                    </div>
                 </div>
-
-                <div class="form-group">
-                </div>
-            </form>
+            </div>
+        }
+        <div class="form-group">
+            <input type="submit" value="Create" class="btn btn-primary" />
         </div>
-    </div>
-}
-<input type="submit" value="Create" class="btn btn-primary" />
+    </form>
+</div>
 
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
 <!-- Display the candidates dropdown -->
 @section Scripts {
     @{

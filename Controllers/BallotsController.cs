@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Routing.Matching;
 using Microsoft.EntityFrameworkCore;
 using VotingSystem.Data;
 
@@ -82,63 +84,49 @@ namespace VotingSystem.Controllers
         // GET: Ballots/Create
         public async Task<IActionResult> Create()
         {
-            var namesOfCandidates = new List<string>();
 
-            //ListOfAllPositions
             var positions = await _context.Positions.ToListAsync();
-
-            foreach (var position in positions)
-            {
-                var Eachcandidates = await GetPosition(position.id);
-                namesOfCandidates.AddRange(Eachcandidates);
-            }
-
             var candidates = await _context.Candidates.ToListAsync();
 
-            foreach (var candidate in candidates)
-            {
-                var Eachcandidates = await GetCandidate(candidate.id);
-                namesOfCandidates.AddRange(Eachcandidates);
-            }
-
-
-
-            // namesOfCandidates now contains the names of all candidates for all positions
-            ViewBag.Positions = positions;
-            ViewBag.Candidates = candidates;
-
-            var groupedCandidates = candidates
-           .Join(positions, c => c.positionId, p => p.id, (c, p) => new { Candidate = c, Position = p })
-            .GroupBy(cp => cp.Position, cp => cp.Candidate);
-
-            var candidateNames = groupedCandidates
-            .Select(g => new { PositionName = g.Key.name, CandidateNames = g.Select(c => c.name).ToList() })
-            .ToList();
-
-
-            ViewBag.GroupedCandidates = groupedCandidates;
-            ViewData["organizationId"] = new SelectList(_context.Organizations, "id", "name");
-
+            ViewData["Positions"] = positions;
+            ViewData["Candidates"] = candidates;
 
             return View();
         }
 
-        // POST: Ballots/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("id,votersId,candidateId,positionId,organizationId")] Ballots ballots)
+        public async Task<IActionResult> Create([Bind("id,name,votersId,candidateId, positionId, organizationId")] Ballots ballots)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(ballots);
+
+                    var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+                    var voter = _context.Voters.SingleOrDefault(a => a.user == userIdString);
+                    if (voter != null)
+                    {
+                        Ballots ballot = new Ballots();
+
+                        ballot.candidateId = ballots.candidateId;
+                        ballot.positionId = ballots.positionId;
+                        ballot.organizationId = ballots.positionId;
+                        ballot.votersId = voter.id;
+                        _context.Ballots.Add(ballot);
+                    }
+
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
+               
             }
+            var positions = await _context.Positions.ToListAsync();
+            var candidates = await _context.Candidates.ToListAsync();
 
+            ViewData["Positions"] = positions;
+            ViewData["Candidates"] = candidates;
 
-            return View();
+            return View(ballots);
         }
 
         // GET: Ballots/Edit/5

@@ -1,6 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace VotingSystem.Data
 {
@@ -18,12 +16,12 @@ namespace VotingSystem.Data
         public int? organizationId { get; set; }
        
 
-        public Voters  voters { get; set; }
+        public virtual Voters  voters { get; set; }
 
-        public Candidates candidate { get; set; }
+        public virtual Candidates candidate { get; set; }
 
-        public Organizations organization { get; set; }
-        public Positions position { get; set; }
+        public virtual Organizations organization { get; set; }
+        public virtual Positions position { get; set; }
 
     }
 

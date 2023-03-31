@@ -112,8 +112,8 @@ namespace VotingSystem.Controllers
         // GET: Candidates/Create
         public IActionResult Create()
         {
-            ViewData["positionId"] = new SelectList(_context.Positions, "id", "name");
-            ViewData["organizationId"] = new SelectList(_context.Organizations, "id", "name");
+            ViewData["positionId"] = new SelectList(_context.Positions, "id", "names");
+            ViewData["organizationId"] = new SelectList(_context.Organizations, "id", "names");
             return View();
         }
 
@@ -130,8 +130,8 @@ namespace VotingSystem.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["positionId"] = new SelectList(_context.Positions, "id", "name", candidates.positionId);
-            ViewData["organizationId"] = new SelectList(_context.Organizations, "id", "name", candidates.organizationId);
+            //ViewData["positionId"] = new SelectList(_context.Positions, "id", "name", candidates.positionId);
+            //ViewData["organizationId"] = new SelectList(_context.Organizations, "id", "name", candidates.organizationId);
             return View(candidates);
         }
 
