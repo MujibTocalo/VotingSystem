@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
@@ -91,8 +92,6 @@ namespace VotingSystem.Areas.Identity.Pages.Account
                 }
             }
 
-        
-
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
             returnUrl = returnUrl ?? Url.Content("~/");
@@ -126,19 +125,25 @@ namespace VotingSystem.Areas.Identity.Pages.Account
                     }
                     else
                     {
-                        Voters voterModel = new Voters();
+                       Voters voter = new Voters();
 
 
-                            voterModel.user = user.Id;
-                            voterModel.name = Input.Name;
-                        voterModel.password = _password;
+                        voter.user = user.Id;
+                        voter.name = Input.Name;
+                        voter.password = _password;
 
-                        _context.Voters.Add(voterModel);
+                        _context.Voters.Add(voter);
                         _context.SaveChanges();
-                        //await _signInManager.SignInAsync(user, isPersistent: false);
-                        await AssignRoleToUser(user, "Voter");
+                      
+                        await AssignRoleToUser(user, "Voters");
+                        var claim = new Claim("VotersClaim", "True");
+                        await _userManager.AddClaimAsync(user, new Claim(user.Id, user.Email));
+
+
+                       
                         return LocalRedirect(returnUrl);
                     }
+
                 }
                 foreach (var error in result.Errors)
                 {

@@ -2,15 +2,18 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Routing.Matching;
 using Microsoft.EntityFrameworkCore;
 using VotingSystem.Data;
 
 namespace VotingSystem.Controllers
 {
+    [Authorize(Roles = "Admin, Voters")]
     public class BallotsController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -19,7 +22,6 @@ namespace VotingSystem.Controllers
         {
             _context = context;
         }
-
         // GET: Ballots
         public async Task<IActionResult> Index()
         {
@@ -47,32 +49,67 @@ namespace VotingSystem.Controllers
         }
 
         // GET: Ballots/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            ViewData["votersId"] = new SelectList(_context.Voters, "id", "name");
-            ViewData["positionId"] = new SelectList(_context.Positions, "id", "name");
-            ViewData["candidateId"] = new SelectList(_context.Candidates, "id", "name");
-            ViewData["organizationId"] = new SelectList(_context.Organizations, "id", "name");
-            return View();
+
+            var positions = await _context.Positions.ToListAsync();
+            var candidates = await _context.Candidates.ToListAsync();
+
+            List<Ballots> ballots = new List<Ballots>();
+
+            foreach (var item in positions)
+            {
+
+                ballots.Add(new Ballots { position = item } );
+
+                ViewData["Positions"] = positions;
+                ViewData["Candidates"] = candidates;
+            }
+
+           
+
+            return View(ballots);
         }
 
-        // POST: Ballots/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("id,votersId,candidateId,positionId,organizationId")] Ballots ballots)
+        public async Task<IActionResult> Create(List<Ballots> ballots)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(ballots);
-                await _context.SaveChangesAsync();
+
+                var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+                var voter = _context.Voters.SingleOrDefault(a => a.user == userIdString);
+
+
+                foreach (var item in ballots)
+                {
+                    
+                    if (voter != null)
+                    {
+                        Ballots ballot = new Ballots();
+
+                        ballot.candidateId = item.candidateId;
+                        ballot.positionId = item.positionId;
+                        ballot.organizationId = item.organizationId;
+                        ballot.votersId = voter.id;
+                        _context.Ballots.Add(ballot);
+                    }
+
+                    await _context.SaveChangesAsync();
+                }
+                    
                 return RedirectToAction(nameof(Index));
+               
             }
-            ViewData["votersId"] = new SelectList(_context.Voters, "id", "id", ballots.votersId);
-            ViewData["candidatesId"] = new SelectList(_context.Candidates, "id", "id", ballots.candidateId);
-            ViewData["positonId"] = new SelectList(_context.Positions, "id", "id", ballots.positionId);
-            ViewData["organizationId"] = new SelectList(_context.Organizations, "id", "id", ballots.organizationId);
+            var positions = await _context.Positions.ToListAsync();
+            var candidates = await _context.Candidates.ToListAsync();
+
+            ViewData["Positions"] = positions;
+            ViewData["Candidates"] = candidates;
+
             return View(ballots);
         }
 
