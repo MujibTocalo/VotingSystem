@@ -10,7 +10,7 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
-<table class="table">
+<table class="table" id="tbllist">
     <thead>
         <tr>
             <th>
@@ -23,7 +23,7 @@
                 @Html.DisplayNameFor(model => model.organizationId)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.voters)
+                @Html.DisplayNameFor(model => model.votersId)
             </th>
             <th></th>
         </tr>
@@ -53,3 +53,4 @@
         }
     </tbody>
 </table>
+

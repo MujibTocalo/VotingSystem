@@ -12,7 +12,7 @@ using VotingSystem.Data;
 
 namespace VotingSystem.Controllers
 {
-    [Authorize(Roles = "Admin, Comelec")]
+    [Authorize(Roles = "Admins, Comelec")]
 
 
     public class CandidatesController : Controller
@@ -112,8 +112,8 @@ namespace VotingSystem.Controllers
         // GET: Candidates/Create
         public IActionResult Create()
         {
-            ViewData["positionId"] = new SelectList(_context.Positions, "id", "names");
-            ViewData["organizationId"] = new SelectList(_context.Organizations, "id", "names");
+            ViewData["positionId"] = new SelectList(_context.Positions, "id", "name");
+            ViewData["organizationId"] = new SelectList(_context.Organizations, "id", "name");
             return View();
         }
 
@@ -130,8 +130,8 @@ namespace VotingSystem.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            //ViewData["positionId"] = new SelectList(_context.Positions, "id", "name", candidates.positionId);
-            //ViewData["organizationId"] = new SelectList(_context.Organizations, "id", "name", candidates.organizationId);
+            ViewData["positionId"] = new SelectList(_context.Positions, "id", "name");
+            ViewData["organizationId"] = new SelectList(_context.Organizations, "id", "name");
             return View(candidates);
         }
 

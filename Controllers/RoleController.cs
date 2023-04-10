@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Identity.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admins")]
     public class RoleController : Controller
     {
         private RoleManager<IdentityRole> roleManager;

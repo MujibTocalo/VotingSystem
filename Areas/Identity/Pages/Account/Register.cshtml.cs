@@ -30,7 +30,7 @@ namespace VotingSystem.Areas.Identity.Pages.Account
         private readonly IEmailSender _emailSender;
         private readonly ApplicationDbContext _context;
         private readonly RoleManager<IdentityRole> _roleManager;
-        private object name;
+       
 
 
         public RegisterModel(

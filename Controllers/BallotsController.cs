@@ -16,7 +16,7 @@ using VotingSystem.Data;
 
 namespace VotingSystem.Controllers
 {
-    [Authorize(Roles = "Admin, Voters")]
+    [Authorize(Roles = "Admins, Voters")]
     public class BallotsController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -61,8 +61,7 @@ namespace VotingSystem.Controllers
         // GET: Ballots/Create
         public async Task<IActionResult> Create()
         {
-            string userName = User.Identity.Name;
-            var user = await _userManager.FindByEmailAsync(userName);
+        
             var positions = await _context.Positions.ToListAsync();
             var candidates = await _context.Candidates.ToListAsync();
 
@@ -77,8 +76,7 @@ namespace VotingSystem.Controllers
                 ViewData["Candidates"] = candidates;
             }
 
-            await _signInManager.SignOutAsync();
-            await _userManager.SetLockoutEndDateAsync(user, DateTimeOffset.UtcNow.AddMinutes(30));
+           
 
             return View(ballots);
         }
@@ -88,6 +86,8 @@ namespace VotingSystem.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(List<Ballots> ballots)
         {
+            string userName = User.Identity.Name;
+            var user = await _userManager.FindByEmailAsync(userName);
             if (ModelState.IsValid)
             {
                 var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -107,10 +107,11 @@ namespace VotingSystem.Controllers
                     await _context.SaveChangesAsync();
                 }
 
-                
+
 
                 // Logout user after saving ballot
-            
+                await _signInManager.SignOutAsync();
+                await _userManager.SetLockoutEndDateAsync(user, DateTimeOffset.UtcNow.AddMinutes(1000));
 
                 // Redirect user to the login page after logout
                 return RedirectToAction(nameof(Index));

@@ -13,7 +13,7 @@ using VotingSystem.Data;
 
 namespace VotingSystem.Controllers
 {
-    [Authorize(Roles = "Admin, Comelec")]
+    [Authorize(Roles = "Admins, Comelec")]
     public class VotersController : Controller
     {
 
@@ -114,10 +114,11 @@ namespace VotingSystem.Controllers
                 var result = await _userManager.CreateAsync(user, _password);
 
                 Voters voter = new Voters();
-                voter.user = voters.user;
+                voter.user = user.Id;
                 voter.name = voters.name;
                 voter.password = _password;
-                voter.organizationId = voters.organizationId;  
+                voter.organizationId = voters.organizationId;
+
 
 
                 _context.Add(voter);
