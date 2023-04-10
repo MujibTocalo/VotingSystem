@@ -54,19 +54,14 @@
                                 <li class="nav-item">
                                     <a class="nav-link text-dark" asp-area="" asp-controller="Comelecs" asp-action="Index">Comelec</a>
                                 </li>
+                               
                                 <li class="nav-item">
                                     <a class="nav-link text-dark" asp-area="" asp-controller="Ballots" asp-action="Index">Ballots</a>
                                 </li>
                             }
                             @if (User.IsInRole("Comelec"))
                             {
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Register">Register Voter</a>
-                                </li>
 
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Organizations" asp-action="Index">Organizations</a>
-                                </li>
                                 <li class="nav-item">
                                     <a class="nav-link text-dark" asp-area="" asp-controller="Positions" asp-action="Index">Positions</a>
                                 </li>

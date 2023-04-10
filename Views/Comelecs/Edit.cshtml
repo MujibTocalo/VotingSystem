@@ -1,12 +1,20 @@
-﻿@model VotingSystem.Models.Comelec
+﻿@model VotingSystem.Data.Comelecs
 
 @{
     ViewData["Title"] = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Edit</h1>
+<!DOCTYPE html>
 
-<h4>Comelec</h4>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Edit</title>
+</head>
+<body>
+
+<h4>Comelecs</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -17,6 +25,16 @@
                 <label asp-for="name" class="control-label"></label>
                 <input asp-for="name" class="form-control" />
                 <span asp-validation-for="name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="user" class="control-label"></label>
+                <input asp-for="user" class="form-control" />
+                <span asp-validation-for="user" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="organizationId" class="control-label"></label>
+                <select asp-for="organizationId" class="form-control" asp-items="ViewBag.organizationId"></select>
+                <span asp-validation-for="organizationId" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
@@ -32,3 +50,5 @@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
+</body>
+</html>

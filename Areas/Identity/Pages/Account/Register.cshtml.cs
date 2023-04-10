@@ -125,7 +125,7 @@ namespace VotingSystem.Areas.Identity.Pages.Account
                     }
                     else
                     {
-                       Voters voter = new Voters();
+                        Voters voter = new Voters();
 
 
                         voter.user = user.Id;
@@ -134,13 +134,26 @@ namespace VotingSystem.Areas.Identity.Pages.Account
 
                         _context.Voters.Add(voter);
                         _context.SaveChanges();
-                      
+
                         await AssignRoleToUser(user, "Voters");
                         var claim = new Claim("VotersClaim", "True");
                         await _userManager.AddClaimAsync(user, new Claim(user.Id, user.Email));
 
 
-                       
+
+                        //Admins admin = new Admins();
+                        //admin.user = user.Id;
+                        //admin.name = Input.Name;   
+                        //admin.password = _password;
+
+                        //_context.Admins.Add(admin);
+                        //_context.SaveChanges();
+
+                        //await AssignRoleToUser(user, "Admins");
+                        //var claim = new Claim("AdminsClaim", "True");
+                        //await _userManager.AddClaimAsync(user, new Claim(user.Id, user.Email));
+
+
                         return LocalRedirect(returnUrl);
                     }
 

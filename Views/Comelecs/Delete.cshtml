@@ -1,14 +1,22 @@
-﻿@model VotingSystem.Models.Comelec
+﻿@model VotingSystem.Data.Comelecs
 
 @{
     ViewData["Title"] = "Delete";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Delete</h1>
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Delete</title>
+</head>
+<body>
 
 <h3>Are you sure you want to delete this?</h3>
 <div>
-    <h4>Comelec</h4>
+    <h4>Comelecs</h4>
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
@@ -17,6 +25,18 @@
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.name)
         </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.user)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.user)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.organization)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.organization.id)
+        </dd class>
     </dl>
     
     <form asp-action="Delete">
@@ -25,3 +45,5 @@
         <a asp-action="Index">Back to List</a>
     </form>
 </div>
+</body>
+</html>
