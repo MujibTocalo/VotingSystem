@@ -4,7 +4,10 @@ using System.Data;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.V3.Pages.Account.Internal;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Routing.Matching;
@@ -13,14 +16,21 @@ using VotingSystem.Data;
 
 namespace VotingSystem.Controllers
 {
-    [Authorize(Roles = "Admin, Voters")]
+    [Authorize(Roles = "Admins, Voters")]
     public class BallotsController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly UserManager<IdentityUser> _userManager;
 
-        public BallotsController(ApplicationDbContext context)
+        public BallotsController(ApplicationDbContext context,
+            SignInManager<IdentityUser> signInManager,
+            UserManager<IdentityUser> userManager
+            )
         {
             _context = context;
+            _signInManager = signInManager;
+            _userManager = userManager;
         }
         // GET: Ballots
         public async Task<IActionResult> Index()
@@ -51,7 +61,7 @@ namespace VotingSystem.Controllers
         // GET: Ballots/Create
         public async Task<IActionResult> Create()
         {
-
+        
             var positions = await _context.Positions.ToListAsync();
             var candidates = await _context.Candidates.ToListAsync();
 
@@ -76,34 +86,37 @@ namespace VotingSystem.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(List<Ballots> ballots)
         {
+            string userName = User.Identity.Name;
+            var user = await _userManager.FindByEmailAsync(userName);
             if (ModelState.IsValid)
             {
-
                 var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
                 var voter = _context.Voters.SingleOrDefault(a => a.user == userIdString);
-
 
                 foreach (var item in ballots)
                 {
-                    
                     if (voter != null)
                     {
                         Ballots ballot = new Ballots();
-
                         ballot.candidateId = item.candidateId;
                         ballot.positionId = item.positionId;
                         ballot.organizationId = item.organizationId;
                         ballot.votersId = voter.id;
                         _context.Ballots.Add(ballot);
                     }
-
                     await _context.SaveChangesAsync();
                 }
-                    
+
+
+
+                // Logout user after saving ballot
+                await _signInManager.SignOutAsync();
+                await _userManager.SetLockoutEndDateAsync(user, DateTimeOffset.UtcNow.AddMinutes(1000));
+
+                // Redirect user to the login page after logout
                 return RedirectToAction(nameof(Index));
-               
             }
+
             var positions = await _context.Positions.ToListAsync();
             var candidates = await _context.Candidates.ToListAsync();
 
@@ -112,6 +125,7 @@ namespace VotingSystem.Controllers
 
             return View(ballots);
         }
+
 
         // GET: Ballots/Edit/5
         public async Task<IActionResult> Edit(int? id)

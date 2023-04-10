@@ -12,7 +12,9 @@ using VotingSystem.Data;
 
 namespace VotingSystem.Controllers
 {
-  
+    [Authorize(Roles = "Admins, Comelec")]
+
+
     public class CandidatesController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -22,10 +24,71 @@ namespace VotingSystem.Controllers
             _context = context;
         }
 
+        public async Task<IEnumerable<string>> GetPosition(int id)
+        {
+            var position = await _context.Positions.FindAsync(id);
+
+            if (position == null)
+            {
+                return Enumerable.Empty<string>();
+            }
+
+            var candidates = await _context.Candidates
+                .Where(c => c.position.name == position.name)
+                .Select(c => c.name)
+                .ToListAsync();
+
+            return candidates;
+        }
+
+        public async Task<IEnumerable<string>> GetCandidate(int id)
+        {
+            var candidate = await _context.Candidates.FindAsync(id);
+
+            if (candidate == null)
+            {
+                return Enumerable.Empty<string>();
+            }
+
+            var newCandidate = await _context.Candidates
+                .Where(c => c.position.name == candidate.position.name)
+                .Select(c => c.name)
+                .ToListAsync();
+
+            return newCandidate;
+        }
+
         // GET: Candidates
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Candidates.ToListAsync());
+
+            //ListOfAllCandidates
+            var namesOfCandidates = new List<string>();
+
+            //ListOfAllPositions
+            var positions = await _context.Positions.ToListAsync();
+
+            foreach (var position in positions)
+            {
+                var Eachcandidates = await GetPosition(position.id);
+                namesOfCandidates.AddRange(Eachcandidates);
+            }
+
+            var candidates = await _context.Candidates.ToListAsync();
+
+            foreach (var candidate in candidates)
+            {
+                var Eachcandidates = await GetCandidate(candidate.id);
+                namesOfCandidates.AddRange(Eachcandidates);
+            }
+
+
+
+            // namesOfCandidates now contains the names of all candidates for all positions
+            ViewBag.Positions = positions;
+            ViewBag.Candidates = candidates;
+
+            return View();
         }
 
         // GET: Candidates/Details/5
@@ -67,8 +130,8 @@ namespace VotingSystem.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["positionId"] = new SelectList(_context.Positions, "id", "id", candidates.positionId);
-            ViewData["organizationId"] = new SelectList(_context.Organizations, "id", "id", candidates.organizationId);
+            ViewData["positionId"] = new SelectList(_context.Positions, "id", "name");
+            ViewData["organizationId"] = new SelectList(_context.Organizations, "id", "name");
             return View(candidates);
         }
 
