@@ -6,21 +6,20 @@
 }
 
 <!-- Display the positions above the candidates dropdown -->
-<div class="col-md-4">
+<div class="table table-sm table-bordered" style="border-radius:12px;">
     <form asp-action="Create">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         @{
-            int i = 0;
+            int i = 0;  
         }
         @foreach (var position in ViewBag.Positions)
         {
-            <div class="row">
+            <div class="">
                 <div class="col-md-4">
                     <div class="form-group">
-                        <label asp-for="@Model[i].candidateId" value="@position.name"><h1>@position.name</h1></label>
+                        <label asp-for="@Model[i].candidateId" value="@position.name"><h4>@position.name</h4></label>
                         <br>
-                        <select asp-for="@Model[i].candidateId" class="form-control form-control-sm form-control-range"
-                                style="width: 20px height: 20px">
+                        <select asp-for="@Model[i].candidateId" class="form-control form-control-sm form-control-rang">
                             @foreach (var candidate in ViewBag.Candidates)
                             {
                                 if (position.id == candidate.positionId)
@@ -39,7 +38,7 @@
             i++;
         }
         <div class="form-group">
-            <input type="submit" value="Create" class="btn btn-primary" />
+            <input type="submit" value="Create" class="btn btn-outline-success" />
         </div>
     </form>
 </div>

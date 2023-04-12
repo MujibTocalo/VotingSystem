@@ -5,12 +5,12 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Details</h1>
+<h1 class="bg-info text-white" style="text-align:center; border-top-right-radius:12px; border-top-left-radius:12px;">Details</h1>
 
 <div>
     <h4>Ballots</h4>
     <hr />
-    <dl class="row">
+    <dl class="table table-sm table-bordered" style="border-radius:12px;">
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.candidateId)
         </dt>
@@ -38,6 +38,9 @@
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Edit" asp-route-id="@Model.id" class="btn btn-sm btn-outline-primary">Edit</a>
+    <div>
+        <a asp-action="Index">Back to List</a>
+    </div>
+    
 </div>

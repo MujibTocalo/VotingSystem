@@ -5,52 +5,51 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Ballots</h1>
+<h1 class="bg-info text-white" style="text-align:center; border-top-left-radius: 12px; border-top-right-radius: 12px;">Ballots</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
 </p>
-<table class="table" id="tbllist">
+<table class="table table-sm  table-striped" style="border-radius: 12px; border-color:black;" id="tbllist">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.candidateId)
+                Candidate
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.positionId)
+                Position
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.organizationId)
+                Organization
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.votersId)
+                Votes
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model)
+        @foreach (var group in Model.GroupBy(b => b.candidateId))
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.candidateId)
+                    @group.Key
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.positionId)
+                    @group.First().positionId
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.organizationId)
+                    @group.First().organizationId
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.voters.id)
+                    @group.Count()
                 </td>
                 <td>
-                    <a asp-action="Edit" asp-route-id="@item.id">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.id">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.id">Delete</a>
+                    <a asp-action="Edit" asp-route-id="@group.First().id" class="btn btn-sm btn-outline-primary">Edit</a> 
+                    <a asp-action="Details" asp-route-id="@group.First().id" class="btn btn-sm btn-outline-info">Details</a> 
+                    <a asp-action="Delete" asp-route-id="@group.First().id" class="btn btn-sm btn-outline-danger">Delete</a>
                 </td>
             </tr>
         }
     </tbody>
 </table>
-

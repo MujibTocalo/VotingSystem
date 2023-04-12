@@ -103,6 +103,10 @@ namespace VotingSystem.Controllers
                         ballot.organizationId = item.organizationId;
                         ballot.votersId = voter.id;
                         _context.Ballots.Add(ballot);
+
+                        var Count = _context.Candidates.SingleOrDefault(a=> a.id == item.candidateId);
+                        Count.votes++;
+                        
                     }
                     await _context.SaveChangesAsync();
                 }
