@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Data;
 using System.Linq;
 using System.Security.Claims;
@@ -11,7 +12,10 @@ using Microsoft.AspNetCore.Identity.UI.V3.Pages.Account.Internal;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Routing.Matching;
+using Microsoft.CodeAnalysis.CSharp.Formatting;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using VotingSystem.Data;
 
 namespace VotingSystem.Controllers
@@ -33,10 +37,10 @@ namespace VotingSystem.Controllers
             _userManager = userManager;
         }
         // GET: Ballots
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            var applicationDbContext = _context.Ballots.Include(b => b.voters);
-            return View(await applicationDbContext.ToListAsync());
+           
+            return RedirectToAction(nameof(Create));
         }
 
         // GET: Ballots/Details/5
@@ -61,22 +65,66 @@ namespace VotingSystem.Controllers
         // GET: Ballots/Create
         public async Task<IActionResult> Create()
         {
-        
+            var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var voter = _context.Voters.SingleOrDefault(a => a.user == userIdString);
+
             var positions = await _context.Positions.ToListAsync();
             var candidates = await _context.Candidates.ToListAsync();
 
+            //var positionsIs = await _context.Positions.(a => a.organizationId == voter.organizationId);
+
+
+            var positionGroup = await _context.Positions
+             .Where(p => p.id == voter.organizationId)
+             .Distinct()
+             .ToListAsync();
+
+
             List<Ballots> ballots = new List<Ballots>();
-
-            foreach (var item in positions)
+            List<Positions> positions22 = new List<Positions>();
+            foreach (var ballot in ballots)
             {
-
-                ballots.Add(new Ballots { position = item } );
-
-                ViewData["Positions"] = positions;
-                ViewData["Candidates"] = candidates;
+                // Access the position property of the ballot object
+                positions22.Add(ballot.position);
             }
 
-           
+
+            foreach (var item in positions)  // president //cs representative= true
+            {
+                if (item.distinct == false)
+                {
+                    ballots.Add(new Ballots { position = item });
+
+                }
+                else //1st year representative PIO IT
+                {
+                    if (voter.yearlevel == item.yearlevel)
+                    {
+                        if (voter.organizationId == item.organizationId)
+                        {
+                            ballots.Add(new Ballots { position = item });
+                        }
+                    }
+                        if (voter.organizationId == item.organizationId && item.yearlevel == null && item.distinct == true)
+                        {
+                            ballots.Add(new Ballots { position = item });
+                        }
+
+                }
+            }
+
+
+
+
+            List<Positions> positionIds = new List<Positions>();
+            foreach (var ballot in ballots)
+            {
+                positionIds.Add(ballot.position);
+            }
+
+
+            ViewData["Positions"] = positionIds;
+            ViewData["Candidates"] = candidates;
 
             return View(ballots);
         }
@@ -105,26 +153,32 @@ namespace VotingSystem.Controllers
                         _context.Ballots.Add(ballot);
 
                         var Count = _context.Candidates.SingleOrDefault(a=> a.id == item.candidateId);
-                        Count.votes++;
+                        if(item.candidateId != null)
+                        {
+                            Count.votes++;
+                        }
                         
+
                     }
                     await _context.SaveChangesAsync();
                 }
 
-
+                
 
                 // Logout user after saving ballot
                 await _signInManager.SignOutAsync();
                 await _userManager.SetLockoutEndDateAsync(user, DateTimeOffset.UtcNow.AddMinutes(1000));
 
+                TempData["SuccessMessage"] = "Ballot submitted successfully.";
                 // Redirect user to the login page after logout
                 return RedirectToAction(nameof(Index));
             }
 
             var positions = await _context.Positions.ToListAsync();
             var candidates = await _context.Candidates.ToListAsync();
+            var positionGroup = await _context.Positions.Distinct().ToListAsync();
 
-            ViewData["Positions"] = positions;
+            ViewData["Positions"] = positionGroup;
             ViewData["Candidates"] = candidates;
 
             return View(ballots);

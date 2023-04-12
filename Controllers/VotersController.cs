@@ -40,6 +40,9 @@ namespace VotingSystem.Controllers
         // GET: Voters
         public async Task<IActionResult> Index()
         {
+            string userName = User.Identity.Name;
+            var user = await _userManager.FindByEmailAsync(userName);
+
             return View(await _context.Voters.ToListAsync());
         }
 
@@ -104,7 +107,7 @@ namespace VotingSystem.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("id,name,organizationId, password, user")] Voters voters)
+        public async Task<IActionResult> Create([Bind("id,name,organizationId, password, user, yearlevel, course, username")] Voters voters)
         {
             if (ModelState.IsValid)
             {
@@ -114,11 +117,13 @@ namespace VotingSystem.Controllers
                 var result = await _userManager.CreateAsync(user, _password);
 
                 Voters voter = new Voters();
-                voter.user = user.Id;
+                voter.user = user.Id;   
                 voter.name = voters.name;
                 voter.password = _password;
                 voter.organizationId = voters.organizationId;
-
+                voter.username = user.UserName;
+                voter.yearlevel = voters.yearlevel;
+                voter.course = voters.course;
 
 
                 _context.Add(voter);

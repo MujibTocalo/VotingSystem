@@ -37,6 +37,8 @@ namespace VotingSystem.Controllers
                 .Where(c => c.position.name == position.name)
                 .Select(c => c.name)
                 .ToListAsync();
+            
+
 
             return candidates;
         }

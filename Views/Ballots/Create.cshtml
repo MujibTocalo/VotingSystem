@@ -12,20 +12,23 @@
         @{
             int i = 0;  
         }
-        @foreach (var position in ViewBag.Positions)
+        @foreach (var position in ViewBag.Positions)    
         {
             <div class="">
                 <div class="col-md-4">
                     <div class="form-group">
                         <label asp-for="@Model[i].candidateId" value="@position.name"><h4>@position.name</h4></label>
+                        
                         <br>
                         <select asp-for="@Model[i].candidateId" class="form-control form-control-sm form-control-rang">
+                            <option value="" selected>-- Select a candidate --</option>
                             @foreach (var candidate in ViewBag.Candidates)
                             {
                                 if (position.id == candidate.positionId)
                                 {
                                     <option value="@candidate.id">@candidate.name</option>
                                 }
+                                
                             }
                         </select>
                         <input type="hidden" asp-for="@Model[i].positionId" value="@position.id" />
@@ -37,16 +40,17 @@
 
             i++;
         }
+
         <div class="form-group">
-            <input type="submit" value="Create" class="btn btn-outline-success" />
+            <input type="submit" value="Create" class="btn btn-outline-success" style="" />
         </div>
     </form>
 </div>
 
-
 <div>
     <a asp-action="Index">Back to List</a>
 </div>
+
 <!-- Display the candidates dropdown -->
 @section Scripts {
     @{

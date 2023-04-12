@@ -11,8 +11,12 @@ namespace VotingSystem.Data
 
         public string name { get; set; }
         public string password { get; set; }
-        //public string course { get; set; 
+      
+        public string username { get; set; }    
 
+        public string yearlevel { get; set; }
+
+        public string course { get; set; }  
         public int? organizationId { get; set; }
 
         public virtual Organizations Organization { get; set; }

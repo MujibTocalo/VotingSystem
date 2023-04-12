@@ -10,9 +10,15 @@ namespace VotingSystem.Data
 
         public string name { get; set; }
 
+        public bool distinct { get; set; }
+
+        public string yearlevel { get; set; }
+
         public int? organizationId { get; set; }
 
         public int? candidates { get; set; }
+
+
 
 
         public virtual Organizations Organization { get; set; }

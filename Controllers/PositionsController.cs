@@ -59,7 +59,7 @@ namespace VotingSystem.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("id,name,organizationId")] Positions positions)
+        public async Task<IActionResult> Create([Bind("id,name,organizationId, yearlevel, distinct")] Positions positions)
         {
             if (ModelState.IsValid)
             {
