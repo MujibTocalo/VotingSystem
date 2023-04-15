@@ -76,7 +76,7 @@ namespace VotingSystem.Controllers
                 namesOfCandidates.AddRange(Eachcandidates);
             }
 
-            var candidates = await _context.Candidates.ToListAsync();
+            var candidates = await _context.Candidates.Include(c=>c.organization).ToListAsync();
 
             foreach (var candidate in candidates)
             {
