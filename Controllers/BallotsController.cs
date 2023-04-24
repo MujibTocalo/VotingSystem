@@ -20,7 +20,7 @@ using VotingSystem.Data;
 
 namespace VotingSystem.Controllers
 {
-    [Authorize(Roles = "Admins, Voters")]
+    [Authorize(Roles = "Admin, Voter")]
     public class BallotsController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -39,8 +39,16 @@ namespace VotingSystem.Controllers
         // GET: Ballots
         public IActionResult Index()
         {
-           
-            return RedirectToAction(nameof(Create));
+            var ballots = _context.Ballots
+                            .Include(b => b.candidate)
+                            .Include(b => b.position)
+                            .ToList();
+
+            var positions = ballots.Select(b => b.position).Distinct().ToList();
+
+            ViewData["positionsId"] = new SelectList(positions, "Id", "Name");
+
+            return View(ballots);
         }
 
         // GET: Ballots/Details/5
@@ -143,7 +151,7 @@ namespace VotingSystem.Controllers
 
                 foreach (var item in ballots)
                 {
-                    if (voter != null)
+                    if (voter != null && item.candidateId != null)
                     {
                         Ballots ballot = new Ballots();
                         ballot.candidateId = item.candidateId;

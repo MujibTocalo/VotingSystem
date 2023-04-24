@@ -1,0 +1,21 @@
+﻿@model List<VotingSystem.Data.Ballots>
+
+@{
+    ViewData["Title"] = "Confirmation";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Confirmation</h1>
+
+<h4>You have selected the following candidates:</h4>
+
+<ul>
+    @foreach (var ballot in Model)
+    {
+        <li>@ballot.candidate.name: @ballot.candidate.name</li>
+    }
+</ul>
+
+<div>
+    <a asp-action="Create">Back to Ballot Creation</a>
+</div>

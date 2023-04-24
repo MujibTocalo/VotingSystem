@@ -13,7 +13,7 @@ using VotingSystem.Data;
 
 namespace VotingSystem.Controllers
 {
-    [Authorize(Roles = "Admins, Comelec")]
+    [Authorize(Roles = "Admin, Comelec")]
     public class VotersController : Controller
     {
 
@@ -44,6 +44,7 @@ namespace VotingSystem.Controllers
             var user = await _userManager.FindByEmailAsync(userName);
 
             return View(await _context.Voters.ToListAsync());
+
         }
 
         // GET: Voters/Details/5
@@ -67,22 +68,11 @@ namespace VotingSystem.Controllers
         // GET: Voters/Create
         public string RandomPassword(int size = 0)
         {
-            StringBuilder builder = new StringBuilder();
-            builder.Append(RandomString(4, true));
-            builder.Append("_");
-            builder.Append(RandomNumber(1000, 9999));
-            builder.Append(RandomString(2, false));
-            return builder.ToString();
-        }
-        public int RandomNumber(int min, int max)
-        {
-            Random random = new Random();
-            return random.Next(min, max);
+            return RandomString(9);
         }
 
-        // Generate a random string with a given size and case.
-        // If second parameter is true, the return string is lowercase
-        public string RandomString(int size, bool lowerCase)
+        // Generate a random string of a given size with all upper case characters.
+        public string RandomString(int size)
         {
             StringBuilder builder = new StringBuilder();
             Random random = new Random();
@@ -92,19 +82,16 @@ namespace VotingSystem.Controllers
                 ch = Convert.ToChar(Convert.ToInt32(Math.Floor(26 * random.NextDouble() + 65)));
                 builder.Append(ch);
             }
-            if (lowerCase)
-                return builder.ToString().ToLower();
             return builder.ToString();
         }
+
         public IActionResult Create()
         {
             ViewData["organizationId"] = new SelectList(_context.Organizations, "id", "name", "user");
             return View();
         }
 
-        // POST: Voters/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+    
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("id,name,organizationId, password, user, yearlevel, course, username")] Voters voters)
@@ -112,7 +99,7 @@ namespace VotingSystem.Controllers
             if (ModelState.IsValid)
             {
 
-                string _password = RandomPassword(10);
+                string _password = RandomPassword(9);
                 var user = new IdentityUser { UserName = voters.user, Email = voters.user };
                 var result = await _userManager.CreateAsync(user, _password);
 
@@ -129,7 +116,7 @@ namespace VotingSystem.Controllers
                 _context.Add(voter);
                 _context.SaveChanges();
 
-                await AssignRoleToUser(user, "Voters");
+                await AssignRoleToUser(user, "Voter");
                 var claim = new Claim("VotersClaim", "True");
                 await _userManager.AddClaimAsync(user, new Claim(user.Id, user.Email));
                 return RedirectToAction(nameof(Create));

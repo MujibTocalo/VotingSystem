@@ -12,7 +12,7 @@ using VotingSystem.Data;
 namespace VotingSystem.Controllers
 {
 
-    [Authorize(Roles = "Admins, Comelec")]
+    [Authorize(Roles = "Admin, Comelec")]
     public class OrganizationsController : Controller
     {
         private readonly ApplicationDbContext _context;

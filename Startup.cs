@@ -39,6 +39,22 @@ namespace VotingSystem
             services.AddAuthorization(options =>
            options.AddPolicy("Voter",
                policy => policy.RequireClaim("Voters")));
+
+
+            services.Configure<IdentityOptions>(options =>
+            {
+                // Password settings
+                options.Password.RequireDigit = true;
+                options.Password.RequiredLength = 8;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireUppercase = true;
+                options.Password.RequireLowercase = false;
+                options.Password.RequireDigit = false;
+
+                //options.Lockout.AllowedForNewUsers = false; // Disable lockout for new users
+                //options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(0); // Set lockout duration to zero
+                options.Lockout.MaxFailedAccessAttempts = 1000; // Disable counting failed access attempts
+            });
         }
 
 

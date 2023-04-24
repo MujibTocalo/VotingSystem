@@ -12,7 +12,7 @@ using VotingSystem.Data;
 
 namespace VotingSystem.Controllers
 {
-    [Authorize(Roles = "Admins, Comelec")]
+    [Authorize(Roles = "Admin, Comelec")]
 
 
     public class CandidatesController : Controller
@@ -124,7 +124,7 @@ namespace VotingSystem.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("id,name,positionId,organizationId")] Candidates candidates)
+        public async Task<IActionResult> Create([Bind("id,name,positionId,organizationId, partylist")] Candidates candidates)
         {
             if (ModelState.IsValid)
             {

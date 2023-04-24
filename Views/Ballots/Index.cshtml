@@ -20,7 +20,7 @@
                 Position
             </th>
             <th>
-                Organization
+                Party-list
             </th>
             <th>
                 Votes
@@ -31,22 +31,27 @@
     <tbody>
         @foreach (var group in Model.GroupBy(b => b.candidateId))
         {
+            var candidateName = group.First().candidate != null ? group.First().candidate.name : "N/A";
+            var positionName = group.First().position.name;
+            var partylistName = group.First().candidate != null ? group.First().candidate.partylist : "N/A";
+            var candidateVotes = group.First().candidate != null ? group.First().candidate.votes : 0;
+
             <tr>
                 <td>
-                    @group.Key
+                    @candidateName
                 </td>
                 <td>
-                    @group.First().positionId
+                    @positionName
                 </td>
                 <td>
-                    @group.First().organizationId
+                    @partylistName
                 </td>
                 <td>
                     @group.Count()
                 </td>
                 <td>
-                    <a asp-action="Edit" asp-route-id="@group.First().id" class="btn btn-sm btn-outline-primary">Edit</a> 
-                    <a asp-action="Details" asp-route-id="@group.First().id" class="btn btn-sm btn-outline-info">Details</a> 
+                    <a asp-action="Edit" asp-route-id="@group.First().id" class="btn btn-sm btn-outline-primary">Edit</a>
+                    <a asp-action="Details" asp-route-id="@group.First().id" class="btn btn-sm btn-outline-info">Details</a>
                     <a asp-action="Delete" asp-route-id="@group.First().id" class="btn btn-sm btn-outline-danger">Delete</a>
                 </td>
             </tr>

@@ -125,18 +125,18 @@ namespace VotingSystem.Areas.Identity.Pages.Account
                     }
                     else
                     {
-                        Voters voter = new Voters();
+                        Admins admin = new Admins();
 
 
-                        voter.user = user.Id;
-                        voter.name = Input.Name;
-                        voter.password = _password;
+                        admin.user = user.Id;
+                        admin.name = Input.Name;
+                        admin.password = _password;
 
-                        _context.Voters.Add(voter);
+                        _context.Admins.Add(admin);
                         _context.SaveChanges();
 
-                        await AssignRoleToUser(user, "Voters");
-                        var claim = new Claim("VotersClaim", "True");
+                        await AssignRoleToUser(user, "Admin");
+                        var claim = new Claim("AdminsClaim", "True");
                         await _userManager.AddClaimAsync(user, new Claim(user.Id, user.Email));
 
 
